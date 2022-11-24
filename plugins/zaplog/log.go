@@ -54,13 +54,13 @@ func (w *RedisWriter) Write(p []byte) (int, error) {
 	w.cli.Expire(context.Background(), w.listKey, 24*time.Hour)
 	return int(n), err
 }
-func getRedisWriter(redisAddr, redisPass string, redisDB int) zapcore.WriteSyncer {
+func getRedisWriter(redisAddr, redisPass, elk_key string, redisDB int) zapcore.WriteSyncer {
 	cli := redis.NewClient(&redis.Options{
 		Addr:     redisAddr,
 		Password: redisPass,
 		DB:       redisDB,
 	})
-	writerRedis := NewRedisWriter("ELK_LOG", cli)
+	writerRedis := NewRedisWriter(elk_key, cli)
 	return zapcore.AddSync(writerRedis)
 }
 
@@ -78,6 +78,7 @@ func New(opts ...conf.Option) *Log {
 		RedisAddr:   conf.RedisAddr,
 		RedisPass:   conf.RedisPass,
 		RedisDB:     conf.RedisDB,
+		ElkKey:      conf.ElkKey,
 	}
 	for _, opt := range opts {
 		opt(o)
@@ -87,7 +88,7 @@ func New(opts ...conf.Option) *Log {
 		writers = append(writers, os.Stdout)
 	}
 	if len(o.RedisAddr) > 0 {
-		writers = append(writers, getRedisWriter(o.RedisAddr, o.RedisPass, o.RedisDB))
+		writers = append(writers, getRedisWriter(o.RedisAddr, o.RedisPass, o.ElkKey, o.RedisDB))
 	}
 	logger := newZapLogger(parseLevel(o.LogLevel), parseLevel(o.Stacktrace), zapcore.NewMultiWriteSyncer(writers...))
 	zap.RedirectStdLog(logger)

@@ -14,6 +14,7 @@ type Options struct {
 	RedisAddr   string //redis地址
 	RedisPass   string //redis密码
 	RedisDB     int    //redis数据库
+	ElkKey      string //elk日志key
 }
 
 func WithRedisAddr(redisAddr string) Option {

@@ -78,5 +78,5 @@ const (
 	RedisAddr   string = "127.0.0.1:6379" //Redis地址
 	RedisPass   string = ""               //Redis密码
 	RedisDB     int    = 0                //Redis数据库
-
+	ElkKey      string = "elk_log"        //elk日志key
 )
