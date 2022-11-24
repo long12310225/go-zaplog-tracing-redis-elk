@@ -1,0 +1,19 @@
+
+language: go
+
+go:
+- "1.15.x"
+- "1.16.x"
+
+env:
+- GO111MODULE=on
+
+before_install:
+#- go get github.com/stretchr/testify
+#- if ! go get code.google.com/p/go.tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi
+
+script:
+  make test;
+
+after_success:
+- bash <(curl -s https://codecov.io/bash) -t c544fbb5-0f7f-4302-ae58-29914561b63d
