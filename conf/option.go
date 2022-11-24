@@ -33,6 +33,12 @@ func WithRedisDB(redisDb int) Option {
 		o.RedisDB = redisDb
 	}
 }
+func WithElkKey(elkKey string) Option {
+	return func(o *Options) {
+		o.ElkKey = elkKey
+	}
+}
+
 func WithLogPath(logpath string) Option {
 	return func(o *Options) {
 		o.LogPath = logpath
